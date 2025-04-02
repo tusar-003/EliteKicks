@@ -35,7 +35,7 @@ EliteKicks is a modern, responsive e-commerce website specializing in premium fo
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/tusar-003/EliteKicks.git
-   cd elitekicks
+   cd EliteKicks
    ```
 
 2. **Open the project**:
