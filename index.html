@@ -4,31 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EliteKicks - Premium Footwear</title>
+    
+    <!-- Preconnect to critical domains -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+    
+    <!-- Load CSS with better strategies -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Cache-Control" content="max-age=86400, public">
+    <meta http-equiv="Expires" content="86400">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
-            <h1 class="logo">EliteKicks</h1>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#about">About</a></li>
-                <li>
-                    <div class="theme-switch-wrapper">
-                        <label class="theme-switch" for="checkbox">
-                            <input type="checkbox" id="checkbox" />
-                            <div class="slider round">
-                                <i class="fas fa-sun"></i>
-                                <i class="fas fa-moon"></i>
-                            </div>
-                        </label>
+            <h1 class="logo"><span>Elite</span><span class="highlight">Kicks</span></h1>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#products">Products</a>
+                <a href="#about">About</a>
+            </div>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
                     </div>
-                </li>
-                <li class="cart-icon"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></li>
-            </ul>
+                </label>
+            </div>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
@@ -37,11 +54,13 @@
     <div class="cart-sidebar">
         <div class="cart-header">
             <h3>Your Cart</h3>
-            <button class="close-cart">&times;</button>
+            <button class="close-cart">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <div class="cart-items"></div>
         <div class="cart-total">
-            <h4>Total: $<span>0</span></h4>
+            <h4>Total: $<span>0.00</span></h4>
             <button class="checkout-btn">Checkout</button>
         </div>
     </div>
@@ -77,6 +96,9 @@
                 <span class="dot" data-slide="3"></span>
                 <span class="dot" data-slide="4"></span>
             </div>
+            <div class="carousel-progress">
+                <div class="carousel-progress-bar"></div>
+            </div>
         </div>
         <div class="container">
             <div class="hero-content">
@@ -99,14 +121,108 @@
         <div class="product-grid"></div>
     </section>
 
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About EliteKicks</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1549298916-f52d724204b4?auto=compress&cs=tinysrgb&w=800&h=500" alt="Premium Footwear Collection" loading="lazy">
+                </div>
+                <div class="about-text">
+                    <h3>Our Story</h3>
+                    <p>Founded in 2010, EliteKicks has been dedicated to providing premium footwear that combines style, comfort, and durability. Our passion for quality shoes drives everything we do.</p>
+                    
+                    <h3>Our Mission</h3>
+                    <p>We believe everyone deserves to step into excellence. Our mission is to offer meticulously crafted footwear that enhances your performance and complements your lifestyle.</p>
+                    
+                    <h3>Quality Commitment</h3>
+                    <p>Each pair of shoes in our collection undergoes rigorous quality checks. We partner with responsible manufacturers who share our commitment to excellence and ethical production practices.</p>
+                    
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span>10+</span>
+                            <p>Years Experience</p>
+                        </div>
+                        <div class="stat">
+                            <span>50k+</span>
+                            <p>Happy Customers</p>
+                        </div>
+                        <div class="stat">
+                            <span>100+</span>
+                            <p>Shoe Designs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
-        <div class="newsletter">
-            <h3>Join Our Newsletter</h3>
-            <input type="email" placeholder="Enter your email">
-            <button class="subscribe-btn">Subscribe</button>
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-about">
+                        <h3 class="footer-logo">EliteKicks</h3>
+                        <p>Premium footwear crafted for perfection. Our collection features the finest quality shoes for every occasion.</p>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/people/Elite-Kicks/100092365220053/" target="_blank" title="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.instagram.com/elitekicks.sc" target="_blank" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://www.tiktok.com/@elitekicks.sc" target="_blank" title="TikTok">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                            <a href="https://elitekicks.shop/" target="_blank" title="Official Website">
+                                <i class="fas fa-globe"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-links">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="#">Men's Collection</a></li>
+                            <li><a href="#">Women's Collection</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="#">Special Offers</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-links">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Shipping & Returns</a></li>
+                            <li><a href="#">Shoe Care</a></li>
+                            <li><a href="#">Size Guide</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-newsletter">
+                        <h4>Join Our Newsletter</h4>
+                        <p>Subscribe to get special offers, free giveaways, and new release updates.</p>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="Enter your email">
+                            <button class="subscribe-btn"><i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p>&copy; 2023 EliteKicks. All rights reserved.</p>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <p>This site is a tribute to <a href="https://elitekicks.shop/" target="_blank">EliteKicks</a>. All rights reserved to the original brand.</p>
+                <div class="footer-links-secondary">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>

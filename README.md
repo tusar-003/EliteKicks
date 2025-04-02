@@ -7,12 +7,14 @@ EliteKicks is a modern, responsive e-commerce website specializing in premium fo
 ## ✨ Features
 
 - **Responsive Design**: Fully optimized for all devices (mobile, tablet, desktop)
-- **Interactive Product Carousel**: Full-screen carousel with auto-advancing slides and navigation controls
+- **Interactive Product Carousel**: Full-screen carousel with auto-advancing slides, clickable navigation dots, and smooth transitions
 - **Dark/Light Theme Toggle**: User preference-based color scheme switching with localStorage persistence
-- **Product Filtering System**: Filter shoes by category (Running, Casual, Sports)
+- **Product Filtering System**: Filter shoes by category (Running, Casual, Sports) with smooth animations
 - **Shopping Cart Functionality**: Add/remove items with real-time total calculation
-- **Product Cards**: Dynamic product rendering with hover effects and add-to-cart functionality
+- **Product Cards**: Dynamic product rendering with smooth hover animations and image zoom effects
 - **Animated UI Elements**: Smooth transitions and hover effects throughout the interface
+- **Performance Optimization**: Image caching, lazy loading, and service worker implementation for faster page loads
+- **Smooth Scrolling**: Enhanced navigation with smooth scrolling to different sections
 
 ## 🛠️ Technologies Used
 
@@ -20,13 +22,13 @@ EliteKicks is a modern, responsive e-commerce website specializing in premium fo
 - CSS3 (Custom variables, Flexbox, Grid, Animations)
 - JavaScript (ES6+)
 - Font Awesome Icons (for UI elements and theme toggle)
+- Service Workers (for caching and offline support)
+- LocalStorage API (for theme preferences and cart persistence)
 - Unsplash API (for product images)
 
 ## 🚀 Live Demo
 
 [View Live Demo](https://yourusername.github.io/elitekicks) (Replace with your actual GitHub Pages URL)
-
-
 
 ## 💻 Installation & Usage
 
@@ -48,12 +50,23 @@ EliteKicks is a modern, responsive e-commerce website specializing in premium fo
      live-server
      ```
 
-3. **Interact with the website**:
-   - Browse the shoe collection
-   - Filter products by category
-   - Toggle between light and dark themes
-   - Add products to cart
-   - Proceed to checkout
+## 🔥 Key Improvements
+
+- **Enhanced Card Animations**: Smooth hover effects on product cards with refined image zoom
+- **Carousel Navigation**: Clickable carousel dots for better user experience
+- **Performance Optimization**: Implemented image caching and preloading for faster loading times
+- **Visual Refinements**: Improved logo design and overall UI polish
+- **Mobile Responsiveness**: Optimized for all screen sizes with better mobile navigation
+
+## 👏 Credits
+
+This project is a tribute to the original EliteKicks brand. All product names, designs, and branding elements belong to their respective owners.
+
+### Official EliteKicks Links:
+- [Official Website](https://elitekicks.shop/)
+- [Facebook](https://www.facebook.com/people/Elite-Kicks/100092365220053/)
+- [Instagram](https://www.instagram.com/elitekicks.sc)
+- [TikTok](https://www.tiktok.com/@elitekicks.sc)
 
 ## 📸 Screenshots
 
@@ -68,8 +81,6 @@ EliteKicks is a modern, responsive e-commerce website specializing in premium fo
 
 ### Mobile View
 ![Mobile View](https://raw.githubusercontent.com/username/elitekicks/main/screenshots/mobile-view.png)
-
-
 
 ## 🤝 Contributing
 
@@ -93,4 +104,4 @@ This project is [MIT](https://opensource.org/licenses/MIT) licensed.
 
 ---
 
-Made with ❤️ by [Tusar Mondal](https://github.com/tusar-003)
+Made with ❤️ by [Your Name](https://github.com/yourusername)
