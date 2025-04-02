@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EliteKicks - Premium Footwear</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">EliteKicks</h1>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li>
+                    <div class="theme-switch-wrapper">
+                        <label class="theme-switch" for="checkbox">
+                            <input type="checkbox" id="checkbox" />
+                            <div class="slider round">
+                                <i class="fas fa-sun"></i>
+                                <i class="fas fa-moon"></i>
+                            </div>
+                        </label>
+                    </div>
+                </li>
+                <li class="cart-icon"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Cart Elements -->
+    <div class="cart-overlay"></div>
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-cart">&times;</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-total">
+            <h4>Total: $<span>0</span></h4>
+            <button class="checkout-btn">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-slide active">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Premium Sneakers">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Red Sneakers">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb" alt="Sport Shoes">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a" alt="Sneaker Collection">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" alt="Lifestyle Shoes">
+                </div>
+            </div>
+            <div class="carousel-nav">
+                <button class="carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="carousel-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+                <span class="dot" data-slide="3"></span>
+                <span class="dot" data-slide="4"></span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="animate-text">Step Into Excellence</h2>
+                <p class="animate-text">Premium footwear crafted for perfection</p>
+                <button class="cta-btn pulse">Shop Collection</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <h2>Our Collection</h2>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="running">Running</button>
+            <button class="filter-btn" data-filter="casual">Casual</button>
+            <button class="filter-btn" data-filter="sports">Sports</button>
+        </div>
+        <div class="product-grid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="newsletter">
+            <h3>Join Our Newsletter</h3>
+            <input type="email" placeholder="Enter your email">
+            <button class="subscribe-btn">Subscribe</button>
+        </div>
+        <p>&copy; 2023 EliteKicks. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
