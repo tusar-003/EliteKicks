@@ -15,6 +15,9 @@
     --card-bg: #fff;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --bg-color-rgb: 255, 255, 255;
+    --primary-color-rgb: 44, 62, 80;
+    --light-bg-rgb: 236, 240, 241;
 }
 
 [data-theme="dark"] {
@@ -25,11 +28,71 @@
     --bg-color: #1a1a1a;
     --card-bg: #2c3e50;
     --shadow-color: rgba(0, 0, 0, 0.3);
+    --bg-color-rgb: 26, 26, 26;
+    --primary-color-rgb: 52, 152, 219;
+    --light-bg-rgb: 44, 62, 80;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    scroll-padding-top: 60px;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
+    overflow-x: hidden;
+    line-height: 1.5;
+    width: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Container - used throughout the site */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Essential animations - reduced and optimized */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Optimize hardware acceleration for animations */
+.product-card, .carousel-slide, .hero-content, .cta-btn, .product-image img {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Essential interactive elements styles */
+button, a {
+    cursor: pointer;
+}
+
+[data-theme="dark"] .navbar {
+    background: rgba(26, 26, 26, 0.95);
 }
 
 /* Theme toggle styling */
@@ -103,6 +166,7 @@ body {
     margin: 0 auto;
     padding: 0 2rem;
     height: 60px;
+    position: relative;
 }
 
 .logo {
@@ -117,6 +181,7 @@ body {
     text-transform: uppercase;
     display: flex;
     align-items: center;
+    margin-right: auto;
 }
 
 .logo::before {
@@ -155,8 +220,9 @@ body {
     gap: 2.5rem;
     margin: 0;
     padding: 0;
-    margin-right: auto;
-    margin-left: 4rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .nav-links a {
@@ -223,61 +289,279 @@ body {
     transform: scale(1.1);
 }
 
-/* Mobile nav styles */
+/* Replace the current menu toggle styles with these improved ones */
 .menu-toggle {
     display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 21px;
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
     cursor: pointer;
+    padding: 6px;
+    margin-left: 15px;
+    z-index: 120;
 }
 
-.menu-toggle span {
-    display: block;
-    height: 3px;
-    width: 100%;
-    background-color: var(--primary-color);
-    border-radius: 3px;
-    transition: all 0.3s ease;
+/* Create menu icon bars */
+.menu-toggle::before,
+.menu-toggle::after,
+.menu-toggle .middle-bar {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 2px;
+    transition: transform 0.3s linear, opacity 0.2s linear;
 }
 
+.menu-toggle::before {
+    top: 10px;
+}
+
+.menu-toggle .middle-bar {
+    top: 17px;
+}
+
+.menu-toggle::after {
+    bottom: 10px;
+}
+
+/* Animated transformation to X */
+.menu-toggle.active::before {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.active .middle-bar {
+    opacity: 0;
+}
+
+.menu-toggle.active::after {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile menu styling improvements */
 @media (max-width: 768px) {
     .menu-toggle {
-        display: flex;
+        display: block;
     }
     
     .nav-links {
         position: fixed;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        background: var(--bg-color);
+        top: 60px;
+        left: -70%;
+        width: 70%;
+        height: calc(100vh - 60px);
+        transform: none;
+        background: rgba(var(--bg-color-rgb, 255, 255, 255), 0.92);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         flex-direction: column;
-        gap: 0;
-        transform: translateY(-100%);
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 10px 20px var(--shadow-color);
-        padding: 1rem 0;
-        z-index: 999;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 2rem 0;
+        z-index: 100;
+        transition: left 0.3s ease-in-out;
     }
     
     .nav-links.active {
-        transform: translateY(0);
+        left: 0;
+    }
+    
+    .nav-overlay {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        z-index: 99;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+    }
+    
+    .nav-overlay.active {
         opacity: 1;
-        pointer-events: all;
+        visibility: visible;
     }
     
-    .nav-links li {
-        width: 100%;
+    [data-theme="dark"] .nav-links {
+        background: rgba(var(--bg-color-rgb, 26, 26, 26), 0.92);
+        border-left: 1px solid rgba(var(--light-bg-rgb, 44, 62, 80), 0.2);
     }
     
-    .nav-links a {
-        display: block;
-        padding: 1rem 2rem;
+    /* Improve animation of menu items */
+    .nav-links .nav-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: opacity 0.3s linear, transform 0.3s linear;
+        transition-delay: 0s;
         width: 100%;
+        text-align: center;
+        padding: 1.2rem 2rem;
+        font-size: 1.2rem;
+        border-bottom: 1px solid var(--light-bg);
+    }
+    
+    /* Staggered animation for menu items */
+    .nav-links.active .nav-item {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .nav-links.active .nav-item:nth-child(1) {
+        transition-delay: 0.1s;
+    }
+    
+    .nav-links.active .nav-item:nth-child(2) {
+        transition-delay: 0.2s;
+    }
+    
+    .nav-links.active .nav-item:nth-child(3) {
+        transition-delay: 0.3s;
+    }
+    
+    /* Fix scrolling issues */
+    .no-scroll {
+        overflow: hidden;
+    }
+    
+    /* Ensure menu is visible in dark mode */
+    [data-theme="dark"] .nav-links {
+        background: var(--bg-color);
+        border-top: 1px solid var(--light-bg);
+    }
+    
+    [data-theme="dark"] .menu-toggle::before,
+    [data-theme="dark"] .menu-toggle::after,
+    [data-theme="dark"] .menu-toggle .middle-bar {
+        background: var(--text-color);
+    }
+    
+    .logo {
+        margin-right: 0;
+    }
+    
+    .nav-right {
+        margin-left: 0;
+    }
+}
+
+/* Group right-side navigation elements */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto;
+}
+
+/* Additional optimization for very small screens */
+@media (max-width: 380px) {
+    .logo {
+        font-size: 1.3rem;
+    }
+    
+    .navbar .container {
+        padding: 0 10px;
+    }
+    
+    .hero-content h2 {
+        font-size: 2rem;
+    }
+    
+    .carousel-dots {
+        bottom: 10px;
+    }
+    
+    .dot {
+        width: 6px;
+        height: 6px;
+        margin: 0 4px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .hero-content h2 {
+        font-size: 3.8rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hero-content h2 {
+        font-size: 3.2rem;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .about-image {
+        order: -1;
+    }
+    
+    .carousel-nav {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    html {
+        font-size: 14px;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .hero-content h2 {
+        font-size: 2.2rem;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .product-card {
+        max-width: 100%;
+    }
+    
+    .product-image {
+        height: 220px;
+    }
+    
+    .about-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-bottom .container {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
     }
 }
 
@@ -414,6 +698,8 @@ body {
     height: 100vh;
     position: relative;
     overflow: hidden;
+    min-height: 100vh;
+    padding-top: 60px;
 }
 
 .carousel-container {
@@ -712,6 +998,7 @@ body {
 .products {
     padding: 5rem 0;
     background: var(--light-bg);
+    min-height: 100vh;
 }
 
 /* Enhanced Filter Buttons */
@@ -783,6 +1070,7 @@ body {
     transform: translateY(20px);
     animation: fadeInUp 0.6s forwards;
     animation-delay: calc(var(--product-index, 0) * 0.1s);
+    cursor: pointer;
 }
 
 .product-card:hover {
@@ -1419,6 +1707,7 @@ input:not(:checked) + .slider .fa-moon {
 .about {
     padding: 6rem 0;
     background: var(--bg-color);
+    min-height: 100vh;
 }
 
 .about .container {
@@ -1545,17 +1834,19 @@ input:not(:checked) + .slider .fa-moon {
 /* Improve mobile responsiveness for hero content */
 @media (max-width: 768px) {
   .hero-content h2 {
-    font-size: 3rem;
+    font-size: 2.8rem;
   }
   
   .hero-content p {
-    font-size: 1.1rem;
-  }
-  
-  .cta-btn {
-    padding: 1rem 2.2rem;
     font-size: 1rem;
   }
+  
+  /* Mobile menu styles */
+  .menu-toggle {
+    display: block;
+  }
+  
+  /* All other mobile styles */
 }
 
 @media (max-width: 480px) {
@@ -1625,39 +1916,168 @@ input:not(:checked) + .slider .fa-moon {
 }
 
 .product-image.loaded::before {
-  display: none;
+    display: none;
 }
 
 /* Add at the top of your CSS file */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px; /* Adjust based on your navbar height */
+  font-size: 16px;
 }
 
-/* Update navbar links styling */
-.nav-links a {
-  color: var(--text-color);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1.05rem;
-  position: relative;
-  padding: 0.5rem 0;
-  transition: var(--transition);
-  cursor: pointer;
+@media (max-width: 320px) {
+  html {
+    font-size: 14px;
+  }
 }
 
-/* Update Shop Collection button styling */
-.cta-btn {
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
+/* Fix viewport issues on mobile */
+@viewport {
+  width: device-width;
+  zoom: 1.0;
 }
 
-/* Add active state for navigation links */
-.nav-links a.active {
-  color: var(--primary-color);
+@-ms-viewport {
+  width: device-width;
 }
 
-.nav-links a.active::after {
-  width: 100%;
+/* Ensure images never break layouts */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure all interactive elements have visible states */
+button, a, input, select, textarea {
+  transition: all 0.2s ease;
+}
+
+/* Optimize scrollbar appearance */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+}
+
+/* Additional mobile optimizations */
+
+/* Ensure proper spacing in product sections */
+@media (max-width: 768px) {
+  .products {
+    padding: 3rem 0;
+  }
+  
+  .product-grid {
+    gap: 1.5rem;
+    padding: 0 1rem 2rem;
+  }
+  
+  /* Fix filter buttons on mobile */
+  .filter-buttons {
+    gap: 0.7rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .filter-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 80px;
+    max-width: 120px;
+  }
+  
+  /* Make product cards more touch-friendly */
+  .product-card {
+    min-height: 380px;
+    transform: none !important; /* Disable hover lift effect on mobile */
+  }
+  
+  /* Ensure add-to-cart buttons are easily tappable */
+  .add-to-cart {
+    width: 44px;
+    height: 44px;
+  }
+  
+  /* Optimize footer for mobile */
+  .footer-top {
+    padding: 3rem 0 2rem;
+  }
+  
+  .footer-grid {
+    gap: 2rem;
+  }
+  
+  /* Touch-friendly social links */
+  .social-links a {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Fix for unintended margin in navbar */
+.nav-links {
+  margin-right: 0;
+  margin-left: 0;
+  justify-content: center;
+}
+
+/* Ensure the header text is properly centered */
+.hero .container {
+  justify-content: center;
+  align-items: center;
+}
+
+/* Optimize layout on landscape orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    height: auto;
+    min-height: 450px;
+  }
+  
+  .hero-content {
+    padding: 1rem;
+  }
+  
+  .hero-content h2 {
+    font-size: 2rem;
+  }
+  
+  .nav-links {
+    height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+/* Ensure proper spacing for larger screens */
+@media (min-width: 769px) {
+    .nav-links {
+        width: auto;
+        background: none;
+        position: absolute;
+        padding: 0;
+    }
+    
+    .nav-links a {
+        color: var(--text-color);
+        font-size: 1.05rem;
+        padding: 0.5rem 0;
+    }
 }

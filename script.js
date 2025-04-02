@@ -175,33 +175,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const existingItem = cart.find(item => item.id === product.id);
       
       if (existingItem) {
-        existingItem.quantity++;
+          existingItem.quantity++;
       } else {
-        cart.push({ ...product, quantity: 1 });
+          cart.push({ ...product, quantity: 1 });
       }
       
       updateCart();
       toggleCart(); // Open cart when item is added
-    }
+  }
 
     // Update cart display
-    function updateCart() {
+  function updateCart() {
       cartItems.innerHTML = '';
       total = 0;
 
       cart.forEach(item => {
-        total += item.price * item.quantity;
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item';
-        cartItem.innerHTML = `
-          <img src="${item.image}" alt="${item.name}">
+          total += item.price * item.quantity;
+          const cartItem = document.createElement('div');
+          cartItem.className = 'cart-item';
+          cartItem.innerHTML = `
+              <img src="${item.image}" alt="${item.name}">
           <div class="cart-item-details">
-            <h4>${item.name}</h4>
+                  <h4>${item.name}</h4>
             <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
             <button class="remove-item" data-id="${item.id}">Remove</button>
-          </div>
-        `;
-        cartItems.appendChild(cartItem);
+              </div>
+          `;
+          cartItems.appendChild(cartItem);
       });
 
       cartTotal.textContent = total.toFixed(2);
@@ -221,13 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
     closeCart.addEventListener('click', toggleCart);
 
     // Remove item from cart
-    cartItems.addEventListener('click', (e) => {
+  cartItems.addEventListener('click', (e) => {
       if (e.target.classList.contains('remove-item')) {
-        const productId = parseInt(e.target.dataset.id);
-        cart = cart.filter(item => item.id !== productId);
-        updateCart();
+          const productId = parseInt(e.target.dataset.id);
+          cart = cart.filter(item => item.id !== productId);
+          updateCart();
       }
-    });
+  });
 
     // Close cart when pressing ESC key
     document.addEventListener('keydown', (e) => {
@@ -245,10 +245,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Event Listeners
   filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
+      button.addEventListener('click', () => {
       // Update active state
-      filterButtons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
       
       const filter = button.getAttribute('data-filter');
       if (filter === 'all') {
@@ -362,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (menuToggle) {
     menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
       navLinks.classList.toggle('active');
       document.body.classList.toggle('no-scroll');
     });
@@ -462,100 +463,75 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Add this inside the DOMContentLoaded event listener (at the end)
-  // Load images with better strategy
+  // Optimize image loading
   function optimizeImageLoading() {
-    const productImages = document.querySelectorAll('.product-image');
+    // Use Intersection Observer for better performance
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target.querySelector('img');
+          if (img && img.dataset.src) {
+            // Determine image size based on viewport width
+            const isMobile = window.innerWidth <= 768;
+            const imgSrc = isMobile 
+              ? img.dataset.src.replace('w=600&h=400', 'w=400&h=300')
+              : img.dataset.src;
+            
+            img.src = imgSrc;
+            
+            // Handle image load event
+            img.onload = () => {
+              img.classList.add('loaded');
+              entry.target.classList.add('loaded');
+              img.onload = null; // Remove event listener
+            };
+            
+            // Remove from further observation
+            observer.unobserve(entry.target);
+          }
+        }
+      });
+    }, {
+      rootMargin: '200px 0px', // Start loading before visible
+      threshold: 0.01
+    });
     
-    productImages.forEach(img => {
-      const bgUrl = img.getAttribute('data-bg');
-      if (bgUrl) {
-        // Create a new image element to preload
-        const tempImg = new Image();
-        tempImg.onload = function() {
-          // Once loaded, set the background image directly
-          img.style.backgroundImage = `url(${bgUrl})`;
-          img.classList.remove('loading');
-        };
-        tempImg.src = bgUrl;
-      }
+    // Observe all product images
+    document.querySelectorAll('.product-image').forEach(imgContainer => {
+      imageObserver.observe(imgContainer);
     });
   }
 
-  // Call this function after products are rendered
-  window.addEventListener('load', () => {
-    loadDeferredResources();
-    optimizeImageLoading();
-  });
-
-  // Image caching utility functions
-  const imageCache = {
-    async saveToCache(url, blob) {
-      try {
-        const base64String = await this.blobToBase64(blob);
-        localStorage.setItem(`img_${url}`, base64String);
-        return base64String;
-      } catch (err) {
-        console.warn('Failed to cache image:', err);
-        return null;
-      }
-    },
-
-    getFromCache(url) {
-      return localStorage.getItem(`img_${url}`);
-    },
-
-    async blobToBase64(blob) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    },
-
-    async loadImage(url) {
-      // First check cache
-      const cachedImage = this.getFromCache(url);
-      if (cachedImage) {
-        return cachedImage;
-      }
-
-      // If not in cache, fetch and cache it
-      try {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        const base64String = await this.saveToCache(url, blob);
-        return base64String || url;
-      } catch (err) {
-        console.warn('Failed to load and cache image:', err);
-        return url;
-      }
-    }
-  };
-
-  // Update the optimizeProductRendering function
-  async function optimizeProductRendering(productsArray) {
-    // Show loading state
-    productGrid.innerHTML = '<div class="loading-placeholder"><div class="loading-spinner"></div><p>Loading products...</p></div>';
-
-    try {
-      // Clear the grid
-      productGrid.innerHTML = '';
-      
-      // Render products
-      productsArray.forEach((product, index) => {
+  // Update the product rendering function to use data-src for lazy loading
+  function optimizeProductRendering(productsArray) {
+    // Clear the grid once
+    productGrid.innerHTML = '';
+    
+    // Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
+    
+    // Determine if we're on mobile
+    const isMobile = window.innerWidth <= 768;
+    
+    // For mobile, render in batches to avoid UI blocking
+    const renderProducts = (products, startIndex) => {
+      products.forEach((product, index) => {
         const productCard = document.createElement('div');
         productCard.classList.add('product-card');
-        productCard.style.animationDelay = `${index * 0.1}s`;
+        productCard.style.animationDelay = `${(startIndex + index) * (isMobile ? 0.05 : 0.1)}s`;
+        
+        // Prepare image URL with appropriate size and use data-src for lazy loading
+        const imgSrc = product.image.includes('unsplash.com') 
+          ? `${product.image}?auto=compress&cs=tinysrgb&${isMobile ? 'w=400&h=300' : 'w=600&h=400'}&fit=crop`
+          : product.image;
         
         productCard.innerHTML = `
           <div class="product-image">
             <img 
-              src="${product.image}" 
+              data-src="${imgSrc}" 
               alt="${product.name}" 
               loading="lazy"
-              onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop';"
+              onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop';"
             >
           </div>
           <div class="product-info">
@@ -563,31 +539,40 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>${product.description}</p>
             <div class="product-footer">
               <span class="price">$${product.price.toFixed(2)}</span>
-              <button class="add-to-cart" data-id="${product.id}">
+              <button class="add-to-cart" data-id="${product.id}" aria-label="Add ${product.name} to cart">
                 <i class="fas fa-shopping-cart"></i>
               </button>
             </div>
           </div>
         `;
         
-        productGrid.appendChild(productCard);
+        fragment.appendChild(productCard);
         
-        // Add event listener for add to cart
-        const addToCartBtn = productCard.querySelector('.add-to-cart');
-        addToCartBtn.addEventListener('click', () => {
-          addToCart(product);
-        });
-
-        // Handle image loading
-        const img = productCard.querySelector('img');
-        img.addEventListener('load', () => {
-          img.classList.add('loaded');
-          productCard.querySelector('.product-image').classList.add('loaded');
-        });
+        // Add event listeners (deferred for better performance)
+        setTimeout(() => {
+          const addToCartBtn = productCard.querySelector('.add-to-cart');
+          addToCartBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(product);
+          });
+        }, 10);
       });
-    } catch (error) {
-      console.error('Error rendering products:', error);
-      productGrid.innerHTML = '<p>Error loading products. Please try again.</p>';
+      
+      productGrid.appendChild(fragment);
+    };
+    
+    if (isMobile && productsArray.length > 6) {
+      // Render critical products first
+      renderProducts(productsArray.slice(0, 4), 0);
+      
+      // Render remaining products after a small delay
+      setTimeout(() => {
+        renderProducts(productsArray.slice(4), 4);
+        optimizeImageLoading();
+      }, 100);
+    } else {
+      renderProducts(productsArray, 0);
+      optimizeImageLoading();
     }
   }
 
@@ -726,34 +711,50 @@ document.addEventListener('DOMContentLoaded', () => {
     return imageCache;
   }
 
-  // Add smooth scrolling for navigation
+  // Update the smooth scrolling function
   function initializeSmoothScroll() {
-    // Get all links that have href starting with #
     const links = document.querySelectorAll('a[href^="#"], .cta-btn');
+    const navbar = document.querySelector('.navbar');
+    const navbarHeight = navbar ? navbar.offsetHeight : 0;
     
     links.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        let targetId;
-        if (this.classList.contains('cta-btn')) {
-          targetId = 'products'; // Shop Collection button should scroll to products
-        } else {
-          targetId = this.getAttribute('href').substring(1);
-        }
-        
-        const targetElement = document.getElementById(targetId);
-        
-        if (targetElement) {
-          const navHeight = document.querySelector('.navbar').offsetHeight;
-          const targetPosition = targetElement.offsetTop - navHeight;
-          
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-          });
-        }
-      });
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            let targetId;
+            if (this.classList.contains('cta-btn')) {
+                targetId = 'products';
+            } else {
+                targetId = this.getAttribute('href').substring(1);
+            }
+            
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                // Close mobile menu if it's open
+                const menuToggle = document.querySelector('.menu-toggle');
+                const navLinks = document.querySelector('.nav-links');
+                const navOverlay = document.querySelector('.nav-overlay');
+                
+                if (menuToggle && menuToggle.classList.contains('active')) {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                }
+                
+                // Calculate scroll position
+                const targetPosition = targetId === 'hero' 
+                    ? 0 // Scroll to very top for hero section
+                    : targetElement.offsetTop - navbarHeight;
+                
+                // Perform smooth scroll
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
   }
 
@@ -764,4 +765,255 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Call initializeCart after DOM is loaded
   initializeCart();
+
+  // Enhanced mobile menu initialization
+  function initializeMobileMenu() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const navItems = document.querySelectorAll('.nav-item');
+    const navOverlay = document.querySelector('.nav-overlay') || createNavOverlay();
+    
+    if (!menuToggle || !navLinks) return;
+    
+    // Function to create nav overlay if it doesn't exist
+    function createNavOverlay() {
+      const overlay = document.createElement('div');
+      overlay.className = 'nav-overlay';
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+    
+    // Remove any existing event listeners to prevent duplication
+    const newMenuToggle = menuToggle.cloneNode(true);
+    menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle);
+    
+    // Add fresh event listeners
+    newMenuToggle.addEventListener('click', toggleMenu);
+    
+    // Add keyboard accessibility
+    newMenuToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMenu(e);
+      }
+    });
+    
+    function toggleMenu(e) {
+      if (e) e.stopPropagation(); // Prevent event bubbling
+      
+      newMenuToggle.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      navOverlay.classList.toggle('active');
+      
+      // Update ARIA attributes for accessibility
+      const expanded = navLinks.classList.contains('active');
+      newMenuToggle.setAttribute('aria-expanded', expanded);
+      
+      // Prevent scrolling when menu is open
+      document.body.classList.toggle('no-scroll', expanded);
+    }
+    
+    // Close menu when clicking on navigation items
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        newMenuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        navOverlay.classList.remove('active');
+        newMenuToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('no-scroll');
+      });
+    });
+    
+    // Close menu when clicking on overlay
+    navOverlay.addEventListener('click', () => {
+      newMenuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      navOverlay.classList.remove('active');
+      newMenuToggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('no-scroll');
+    });
+    
+    // Close menu when pressing Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+        newMenuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        navOverlay.classList.remove('active');
+        newMenuToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('no-scroll');
+      }
+    });
+    
+    // Initialize ARIA attributes
+    newMenuToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  // Make sure this is called when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Remove older initialization of mobile menu
+    const oldMenuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (oldMenuToggle) {
+      // Remove old event listeners
+      const newMenuToggle = oldMenuToggle.cloneNode(true);
+      oldMenuToggle.parentNode.replaceChild(newMenuToggle, oldMenuToggle);
+    }
+    
+    // Initialize the enhanced mobile menu
+    initializeMobileMenu();
+  });
+
+  // Add these functions to your script.js file
+  function optimizeForMobile() {
+    // Check if we're on a mobile device
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // Reduce animation complexity on mobile
+      document.documentElement.style.setProperty('--transition', 'all 0.2s ease');
+      
+      // Use smaller image sizes for mobile
+      const productImages = document.querySelectorAll('.product-image img');
+      productImages.forEach(img => {
+        const src = img.src;
+        if (src.includes('unsplash.com') && src.includes('w=600')) {
+          // Replace with smaller images for mobile
+          img.src = src.replace('w=600&h=400', 'w=400&h=300');
+        }
+      });
+      
+      // Optimize carousel for mobile - reduce autoplay speed to save resources
+      const slideInterval = window.slideInterval;
+      if (slideInterval) {
+        clearInterval(slideInterval);
+        window.slideInterval = setInterval(() => {
+          nextSlide();
+          startProgressAnimation();
+        }, 7000); // Longer interval on mobile
+      }
+      
+      // Use intersection observer to lazy load content
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const lazyImage = entry.target;
+            if (lazyImage.classList.contains('lazy-background')) {
+              const bg = lazyImage.dataset.bg;
+              if (bg) {
+                lazyImage.style.backgroundImage = `url(${bg})`;
+                lazyImage.classList.remove('lazy-background');
+              }
+            }
+            observer.unobserve(lazyImage);
+          }
+        });
+      }, {
+        rootMargin: '100px 0px'
+      });
+      
+      // Observe all lazy-loadable elements
+      document.querySelectorAll('.lazy-background').forEach(img => {
+        observer.observe(img);
+      });
+    }
+  }
+
+  // Add this to reduce motion for users who prefer it
+  function respectReducedMotion() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Apply styles for reduced motion
+      const style = document.createElement('style');
+      style.innerHTML = `
+        *, *::before, *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
+  // Add this to your DOMContentLoaded event
+  window.addEventListener('DOMContentLoaded', () => {
+    // ... existing code ...
+    
+    optimizeForMobile();
+    respectReducedMotion();
+    
+    // Re-run optimizations on resize
+    window.addEventListener('resize', debounce(() => {
+      optimizeForMobile();
+    }, 250));
+  });
+
+  // Additional performance optimizations
+  function optimizePerformance() {
+    // Reduce animation complexity on mobile
+    if (window.innerWidth <= 768) {
+      document.documentElement.style.setProperty('--transition', 'all 0.2s ease');
+      
+      // Optimize carousel for mobile by increasing interval
+      if (window.slideInterval) {
+        clearInterval(window.slideInterval);
+        window.slideInterval = setInterval(() => {
+          nextSlide();
+          startProgressAnimation();
+        }, 7000); // Longer interval on mobile
+      }
+    }
+    
+    // Defer non-critical JavaScript
+    const deferScripts = () => {
+      // Prefetch product images for faster future loading
+      if ('connection' in navigator && navigator.connection.saveData === false) {
+        // Only prefetch if user is not on data-saving mode
+        const productImages = document.querySelectorAll('.product-image img');
+        productImages.forEach(img => {
+          if (img.dataset.src && !img.src) {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.as = 'image';
+            link.href = img.dataset.src;
+            document.head.appendChild(link);
+          }
+        });
+      }
+      
+      // Load social icons only when they're close to viewport
+      const socialLinks = document.querySelectorAll('.social-links a');
+      if (socialLinks.length) {
+        const socialObserver = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            socialLinks.forEach(link => {
+              link.style.opacity = '1';
+            });
+            socialObserver.disconnect();
+          }
+        }, { rootMargin: '200px 0px' });
+        
+        socialObserver.observe(document.querySelector('.footer'));
+      }
+    };
+    
+    // Execute after initial page load is complete
+    if (document.readyState === 'complete') {
+      deferScripts();
+    } else {
+      window.addEventListener('load', deferScripts);
+    }
+    
+    // Prevent layout thrashing
+    window.addEventListener('resize', debounce(() => {
+      optimizePerformance();
+    }, 250));
+  }
+
+  // Call this function to initialize all optimizations
+  document.addEventListener('DOMContentLoaded', () => {
+    // ... other initialization code ...
+    
+    optimizePerformance();
+  });
 });
