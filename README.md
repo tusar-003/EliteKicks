@@ -28,13 +28,13 @@ EliteKicks is a modern, responsive e-commerce website specializing in premium fo
 
 ## 🚀 Live Demo
 
-[View Live Demo](https://yourusername.github.io/elitekicks) (Replace with your actual GitHub Pages URL)
+[View Live Demo](https://elite-kicks.vercel.app/)
 
 ## 💻 Installation & Usage
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/elitekicks.git
+   git clone https://github.com/tusar-003/EliteKicks.git
    cd elitekicks
    ```
 
@@ -71,7 +71,7 @@ This project is a tribute to the original EliteKicks brand. All product names, d
 ## 📸 Screenshots
 
 ### Home Page
-![Home Page](/Screenshots/Home.png)
+![Home Page](/Screenshots/Home-light.png)
 
 ### Dark Mode
 ![Dark Mode](/Screenshots/Home-dark.png)
