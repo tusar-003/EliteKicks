@@ -92,4 +92,4 @@ This project is a tribute to the original EliteKicks brand. All product names, d
 
 ---
 
-Made with ❤️ by [Your Name](https://github.com/yourusername)
+Made with ❤️ by [Tusar Mondal](https://github.com/tusar-003)
